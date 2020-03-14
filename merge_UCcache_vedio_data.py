@@ -91,9 +91,9 @@ def merge_data_by_name_list(root_dir=None, data_dir=None, filenames_dir=None):
                             with fpath.open("rb")as inf:
                                 data = inf.read()
                                 outf.write(data)
-            # if os.path.exists(corresponding_data_dir):
-            #     shutil.rmtree(corresponding_data_dir)
-            # fn.unlink()
+            if os.path.exists(corresponding_data_dir):
+                shutil.rmtree(corresponding_data_dir)
+        fn.unlink()
     print("Already processed {} files".format(cn))
 
 
@@ -143,13 +143,13 @@ def merge_data_by_content(root_dir=None, data_dir=None):
                 files.append(str(fn.resolve()))
         try:
             authorized_file_names = authorize_filenames(files)
-            with root_dir.joinpath("Merged/without_filelist", target_name).open("ab")as outf:
-                for fn in authorized_file_names:
-                    with codecs.open(fn, "rb")as inf:
-                        data = inf.read()
-                        outf.write(data)
-            # if _dir.exists():
-            #     shutil.rmtree(_dir)
+            if authorized_file_names:
+                with root_dir.joinpath("Merged/without_filelist", target_name).open("ab")as outf:
+                    for fn in authorized_file_names:
+                        with codecs.open(fn, "rb")as inf:
+                            data = inf.read()
+                            outf.write(data)
+            shutil.rmtree(_dir, ignore_errors=True)
         except:
             print("Cannot process file: {}".format(_dir))
     print("Finally processed {} files.".format(cn))
@@ -160,5 +160,5 @@ if __name__ == "__main__":
     # merge_data_with_list()
     # merge_data_without_list()
 
-    # merge_data_by_name_list(root_dir="F:/Zapya")
-    merge_data_by_content(root_dir="F:/Zapya")
+    merge_data_by_name_list(root_dir="F:/Zapya")
+    # merge_data_by_content(root_dir="F:/Zapya")
