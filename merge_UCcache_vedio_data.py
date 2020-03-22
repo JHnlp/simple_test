@@ -20,8 +20,11 @@ def authorize_filenames(filenames):
             suffix.append(temp[-1])
             temp = temp[:-1]
         suffix = suffix[::-1]
-        suffix = int("".join(suffix))
-        new_names.append((temp, suffix))
+        try:
+            suffix = int("".join(suffix))
+            new_names.append((temp, suffix))
+        except:
+            print("ignore file: {}".format(fn))
 
     new_names = sorted(new_names, key=lambda x: x[-1], reverse=False)
     new_names = [x + str(y) for x, y in new_names]
@@ -160,8 +163,8 @@ if __name__ == "__main__":
     # merge_data_with_list()
     # merge_data_without_list()
 
-    merge_data_by_name_list(root_dir="F:/Zapya",
-                            data_folder_name="Folder",
-                            filelist_folder_name="Misc")
-    # merge_data_by_content(root_dir="F:/Zapya",
-    #                       data_folder_name="Backup")
+    # merge_data_by_name_list(root_dir="F:/Zapya",
+    #                         data_folder_name="Folder",
+    #                         filelist_folder_name="Misc")
+    merge_data_by_content(root_dir="F:/Zapya",
+                          data_folder_name="Folder")
