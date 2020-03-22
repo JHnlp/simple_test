@@ -53,7 +53,7 @@ def merge_data_with_list():
             os.remove(os.path.join(r, fl))
 
 
-def merge_data_by_name_list(root_dir=None, data_dir=None, filenames_dir=None):
+def merge_data_by_name_list(root_dir=None, data_folder_name=None, filelist_folder_name=None):
     """
     when we have the *.m3u8 files
     """
@@ -61,17 +61,17 @@ def merge_data_by_name_list(root_dir=None, data_dir=None, filenames_dir=None):
         root_dir = pathlib.Path(__file__).resolve().parent  # "F:/Zapya"
     else:
         root_dir = pathlib.Path(root_dir)
-    if not data_dir:
-        data_dir = root_dir.joinpath("Folder")
+    if not data_folder_name:
+        data_folder = root_dir.joinpath("Folder")
     else:
-        data_dir = pathlib.Path(data_dir)
-    if not filenames_dir:
-        filenames_dir = root_dir.joinpath("Misc")
+        data_folder = root_dir.joinpath(data_folder_name)
+    if not filelist_folder_name:
+        filelist_folder = root_dir.joinpath("Misc")
     else:
-        filenames_dir = pathlib.Path(filenames_dir)
+        filelist_folder = root_dir.joinpath(filelist_folder_name)
 
     cn = 0
-    for fn in filenames_dir.glob("*.m3u8"):
+    for fn in filelist_folder.glob("*.m3u8"):
         stem = fn.stem
         corresponding_data_dir = ""  # should be removed finally
         target_name = stem + ".mp4"
@@ -81,7 +81,7 @@ def merge_data_by_name_list(root_dir=None, data_dir=None, filenames_dir=None):
             for ln in f:
                 ln = ln.rstrip()
                 if ln.rstrip().startswith("/storage/"):
-                    fpath = ln.replace("/storage/emulated/0/UCDownloads/VideoData/", str(data_dir))
+                    fpath = ln.replace("/storage/emulated/0/UCDownloads/VideoData/", str(data_folder))
                     if not corresponding_data_dir:
                         corresponding_data_dir = fpath[:fpath.rfind("/")]
 
@@ -119,7 +119,7 @@ def merge_data_without_list():
                         print(_, filenames)
 
 
-def merge_data_by_content(root_dir=None, data_dir=None):
+def merge_data_by_content(root_dir=None, data_folder_name=None):
     """
     when we don't have the *.m3u8 files
     """
@@ -127,13 +127,13 @@ def merge_data_by_content(root_dir=None, data_dir=None):
         root_dir = pathlib.Path(__file__).resolve().parent  # "F:/Zapya"
     else:
         root_dir = pathlib.Path(root_dir)
-    if not data_dir:
-        data_dir = root_dir.joinpath("Folder")
+    if not data_folder_name:
+        data_folder = root_dir.joinpath("Folder")
     else:
-        data_dir = pathlib.Path(data_dir)
+        data_folder = root_dir.joinpath(data_folder_name)
 
     cn = 0
-    for _dir in data_dir.iterdir():
+    for _dir in data_folder.iterdir():
         target_name = _dir.stem + ".mp4"
         files = []
         print("\tprocessing: {}".format(target_name))
@@ -160,5 +160,8 @@ if __name__ == "__main__":
     # merge_data_with_list()
     # merge_data_without_list()
 
-    merge_data_by_name_list(root_dir="F:/Zapya")
-    # merge_data_by_content(root_dir="F:/Zapya")
+    merge_data_by_name_list(root_dir="F:/Zapya",
+                            data_folder_name="Folder",
+                            filelist_folder_name="Misc")
+    # merge_data_by_content(root_dir="F:/Zapya",
+    #                       data_folder_name="Backup")
