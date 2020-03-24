@@ -31,31 +31,6 @@ def authorize_filenames(filenames):
     return new_names
 
 
-def merge_data_with_list():
-    for r, dirs, filelists in os.walk(filelists_path):
-        # new_files = authorize_file_names_when_necessary(files)
-        for fl in filelists:
-            original_data_dir = ""
-            target_name = os.path.splitext(fl)[0] + ".mp4"
-
-            with codecs.open(os.path.join(r, fl), "r", "utf8")as f:
-                for ln in f:
-                    ln = ln.rstrip()
-                    if ln.rstrip().startswith("/storage/"):
-                        fpath = ln.replace("/storage/emulated/0/UCDownloads/VideoData/", par_data_dir)
-                        if not original_data_dir:
-                            original_data_dir = fpath[:fpath.rfind("/")]
-
-                        if os.path.exists(fpath):
-                            with codecs.open(os.path.join(root_dir, "Merged/with_filelist", target_name), "ab")as outf:
-                                with codecs.open(fpath, "rb")as inf:
-                                    data = inf.read()
-                                    outf.write(data)
-            if os.path.exists(original_data_dir):
-                shutil.rmtree(original_data_dir)
-            os.remove(os.path.join(r, fl))
-
-
 def merge_data_by_name_list(root_dir=None, data_folder_name=None, filelist_folder_name=None):
     """
     when we have the *.m3u8 files
@@ -100,28 +75,6 @@ def merge_data_by_name_list(root_dir=None, data_folder_name=None, filelist_folde
     print("Already processed {} files".format(cn))
 
 
-def merge_data_without_list():
-    for r, dirs, filelists in os.walk(par_data_dir):
-        for dd in dirs:
-            target_name = os.path.splitext(dd)[0] + ".mp4"
-
-            for _, dirnames, filenames in os.walk(os.path.join(r, dd)):
-                if filenames:
-                    try:
-                        authorized_file_names = authorize_filenames(filenames)
-                        with codecs.open(os.path.join(root_dir, "Merged/without_filelist", target_name),
-                                         "ab")as outf:
-                            for fn in authorized_file_names:
-                                with codecs.open(os.path.join(r, dd, fn), "rb")as inf:
-                                    data = inf.read()
-                                    outf.write(data)
-                        if os.path.exists(os.path.join(r, dd)):
-                            shutil.rmtree(os.path.join(r, dd))
-
-                    except:
-                        print(_, filenames)
-
-
 def merge_data_by_content(root_dir=None, data_folder_name=None):
     """
     when we don't have the *.m3u8 files
@@ -160,11 +113,8 @@ def merge_data_by_content(root_dir=None, data_folder_name=None):
 
 if __name__ == "__main__":
     print("Merging data, please wait for seconds...")
-    # merge_data_with_list()
-    # merge_data_without_list()
-
-    # merge_data_by_name_list(root_dir="F:/Zapya",
-    #                         data_folder_name="Folder",
-    #                         filelist_folder_name="Misc")
+    merge_data_by_name_list(root_dir="F:/Zapya",
+                            data_folder_name="Folder",
+                            filelist_folder_name="Misc")
     merge_data_by_content(root_dir="F:/Zapya",
                           data_folder_name="Folder")
