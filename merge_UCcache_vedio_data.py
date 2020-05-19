@@ -31,6 +31,13 @@ def authorize_filenames(filenames):
     return new_names
 
 
+def trunc_name(name):
+    punc = ':?/\\"\'{},<>|;!@#$%^&*-=+()[]~`'
+    for ch in punc:
+        name = name.replace(ch, "_")
+    return name
+
+
 def merge_data_by_name_list(root_dir=None, data_folder_name=None, filelist_folder_name=None):
     """
     when we have the *.m3u8 files
@@ -51,6 +58,8 @@ def merge_data_by_name_list(root_dir=None, data_folder_name=None, filelist_folde
     cn = 0
     for fn in filelist_folder.glob("*.m3u8"):
         stem = fn.stem
+        stem = stem[:25]
+        stem = trunc_name(stem)
         corresponding_data_dir = ""  # should be removed finally
         target_name = stem + ".mp4"
         print("\tprocessing: {}".format(target_name))
@@ -90,7 +99,10 @@ def merge_data_by_content(root_dir=None, data_folder_name=None):
 
     cn = 0
     for _dir in data_folder.iterdir():
-        target_name = _dir.stem + ".mp4"
+        target_name = _dir.stem
+        target_name = target_name[:25]
+        target_name = trunc_name(target_name)
+        target_name = target_name + ".mp4"
         files = []
         print("\tprocessing: {}".format(target_name))
         cn += 1
@@ -113,8 +125,8 @@ def merge_data_by_content(root_dir=None, data_folder_name=None):
 
 if __name__ == "__main__":
     print("Merging data, please wait for seconds...")
-    merge_data_by_name_list(root_dir="F:/Zapya",
+    merge_data_by_name_list(root_dir="/home/sunsunbest/Windows10_1t_J/Zapya",
                             data_folder_name="Folder",
                             filelist_folder_name="Misc")
-    merge_data_by_content(root_dir="F:/Zapya",
+    merge_data_by_content(root_dir="/home/sunsunbest/Windows10_1t_J/Zapya",
                           data_folder_name="Folder")
