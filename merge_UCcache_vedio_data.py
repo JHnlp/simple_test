@@ -6,15 +6,20 @@ import pathlib
 # os.remove()
 # os.removedirs()
 
-root_dir = pathlib.Path(__file__).resolve().parent  # "F:/Zapya"
-filelists_path = os.path.join(root_dir, "Misc")
-par_data_dir = os.path.join(root_dir, "Folder")
+ROOT_DIR = pathlib.Path(__file__).resolve().parent  # "F:/Zapya"
+FILELISTS_PATH = os.path.join(ROOT_DIR, "Misc")
+PARENT_DATA_DIR = os.path.join(ROOT_DIR, "Folder")
+FILENAME_BLACKLIST = ["kye0", ".index.m3u8", ".local.index.m3u8", "k0"]
 
 
 def authorize_filenames(filenames):
     new_names = []
-    for fn in filenames:
-        temp = fn
+    for absolute_fn in filenames:
+        temp = absolute_fn
+        fn = absolute_fn[absolute_fn.rfind("/"):]
+        if fn in FILENAME_BLACKLIST:  # filter some invalid files
+            continue
+
         suffix = []
         while (temp[-1].isdigit()):
             suffix.append(temp[-1])
@@ -24,7 +29,7 @@ def authorize_filenames(filenames):
             suffix = int("".join(suffix))
             new_names.append((temp, suffix))
         except:
-            print("ignore file: {}".format(fn))
+            print("ignore file: {}".format(absolute_fn))
 
     new_names = sorted(new_names, key=lambda x: x[-1], reverse=False)
     new_names = [x + str(y) for x, y in new_names]
