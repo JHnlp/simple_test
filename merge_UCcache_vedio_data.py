@@ -166,8 +166,8 @@ def merge_data_by_content(root_dir=None, data_folder_name=None):
 
 if __name__ == "__main__":
     print("Merging data, please wait for seconds...")
-    # merge_data_by_name_list(root_dir="J:/Zapya",
-    #                         data_folder_name="Folder",
-    #                         m3u8_folder_name="Misc")
+    merge_data_by_name_list(root_dir="J:/Zapya",
+                            data_folder_name="Folder",
+                            m3u8_folder_name="Misc")
     merge_data_by_content(root_dir="J:/Zapya",
                           data_folder_name="Folder")
