@@ -102,11 +102,12 @@ def merge_data_by_name_list(root_dir=None, data_folder_name=None, m3u8_folder_na
         with fm3u8.open("r", encoding="utf8")as f:
             cryptor = None
             player_files, encript_file = parse_m3u8(data_folder, fm3u8)
-            encript_file = pathlib.Path(encript_file)
-            if encript_file.exists():
-                with encript_file.open("rb") as enf:
-                    encript_key = enf.read()
-                    cryptor = AES.new(encript_key, AES.MODE_CBC, encript_key)
+            if encript_file is not None:
+                encript_file = pathlib.Path(encript_file)
+                if encript_file.exists():
+                    with encript_file.open("rb") as enf:
+                        encript_key = enf.read()
+                        cryptor = AES.new(encript_key, AES.MODE_CBC, encript_key)
             for fpath in player_files:
                 if not corresponding_data_dir:
                     corresponding_data_dir = fpath[:fpath.rfind("/")]
