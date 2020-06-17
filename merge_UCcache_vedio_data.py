@@ -93,7 +93,7 @@ def merge_data_by_name_list(root_dir=None, data_folder_name=None, m3u8_folder_na
     cn = 0
     for fm3u8 in m3u8_folder.glob("*.m3u8"):
         stem = fm3u8.stem
-        stem = stem[:40]
+        stem = stem[:80]
         stem = trunc_name(stem)
         corresponding_data_dir = ""  # should be removed finally
         target_name = stem + ".mp4"
@@ -143,7 +143,7 @@ def merge_data_by_content(root_dir=None, data_folder_name=None):
     cn = 0
     for _dir in data_folder.iterdir():
         target_name = _dir.stem
-        target_name = target_name[:40]
+        target_name = target_name[:80]
         target_name = trunc_name(target_name)
         target_name = target_name + ".mp4"
         files = []
